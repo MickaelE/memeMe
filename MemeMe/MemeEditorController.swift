@@ -85,7 +85,6 @@ class MemeEditorController : UIViewController, UITextFieldDelegate, UIImagePicke
     }
     override func viewWillDisappear(animated: Bool) {
         super.viewWillDisappear(animated)
-       // self.su
     }
     
     func subscribeToKeyboardNotifications() {
@@ -101,8 +100,7 @@ class MemeEditorController : UIViewController, UITextFieldDelegate, UIImagePicke
     }
     
     func keyboardWillShow(notification: NSNotification) {
-        
-        //TODO: add if.
+       
         if activeTextField.tag == 1 {
         self.view.frame.origin.y -= getKeyboardHeight(notification)
         }
@@ -127,8 +125,10 @@ class MemeEditorController : UIViewController, UITextFieldDelegate, UIImagePicke
     }
     
     @IBAction func openCamera(sender: AnyObject) {
+        if (UIImagePickerController.isSourceTypeAvailable(UIImagePickerControllerSourceType.Camera)){
         imagePicker.sourceType = UIImagePickerControllerSourceType.Camera;
-        self.presentViewController(imagePicker, animated: true, completion: nil)
+            self.presentViewController(imagePicker, animated: true, completion: nil)
+        }
     }
     
     func imagePickerController(picker: UIImagePickerController, didFinishPickingImage image: UIImage!, editingInfo: [NSObject : AnyObject]!) {
@@ -137,7 +137,7 @@ class MemeEditorController : UIViewController, UITextFieldDelegate, UIImagePicke
         imageView.image = pickedImage
         dismissViewControllerAnimated(true, completion: nil)
         if shareMeme.enabled == false {
-        shareMeme.enabled = true;
+            shareMeme.enabled = true;
         }
     }
     //Meme section
@@ -149,9 +149,12 @@ class MemeEditorController : UIViewController, UITextFieldDelegate, UIImagePicke
         let appDelegate = object as! AppDelegate
         appDelegate.memes.append(meme)
     }
+    
     func generateMemedImage() -> UIImage {
         
         // TODO: Hide toolbar and navbar
+        self.navigationController?.setToolbarHidden(true, animated: true)
+        self.navigationController?.setNavigationBarHidden(true, animated: false)
         
         // Render view to an image
         UIGraphicsBeginImageContext(self.view.frame.size)
@@ -162,16 +165,13 @@ class MemeEditorController : UIViewController, UITextFieldDelegate, UIImagePicke
         UIGraphicsEndImageContext()
         
         // TODO:  Show toolbar and navbar
+        self.navigationController?.setToolbarHidden(false, animated: true)
+        self.navigationController?.setNavigationBarHidden(false, animated: false)
         
         return memedImage
     }
     
     func shareMemeFuction() {
-    /*
-    generate a memed image
-    define an instance of the ActivityViewController
-    pass the ActivityViewController a memedImage as an activity item
-    present the ActivityViewController*/
         //Create the meme
         memeImage = generateMemedImage()
         
@@ -183,7 +183,8 @@ class MemeEditorController : UIViewController, UITextFieldDelegate, UIImagePicke
         activityViewController.completionWithItemsHandler  = {  (activity, success, items, error) in
             if success == true{
                 self.save();
-            self.navigationController?.popToRootViewControllerAnimated(true)}
+                self.dismissViewControllerAnimated(false, completion: nil)
+            }
         }
     }
 

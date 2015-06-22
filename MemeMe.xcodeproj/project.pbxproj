@@ -93,8 +93,8 @@
 				2547E9141B2B08730021B43B /* meme.swift */,
 				2522F9F31B29BF9F001E81FF /* Images.xcassets */,
 				2522F9F51B29BF9F001E81FF /* LaunchScreen.xib */,
-				2522F9EA1B29BF9F001E81FF /* Supporting Files */,
 				258F397E1B2ECEDC0032689F /* MemeTableViewController.swift */,
+				2522F9EA1B29BF9F001E81FF /* Supporting Files */,
 			);
 			path = MemeMe;
 			sourceTree = "<group>";

@@ -351,8 +351,7 @@
                                                     <exclude reference="ZBo-td-S6a"/>
                                                 </mask>
                                             </variation>
-                                            <variation key="widthClass=compact" misplaced="YES">
-                                                <rect key="frame" x="0.0" y="-8" width="50" height="43"/>
+                                            <variation key="widthClass=compact">
                                                 <mask key="constraints">
                                                     <include reference="ZBo-td-S6a"/>
                                                 </mask>
