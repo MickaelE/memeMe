@@ -168,6 +168,8 @@ class MemeEditorController : UIViewController, UITextFieldDelegate, UIImagePicke
         self.navigationController?.setToolbarHidden(false, animated: true)
         self.navigationController?.setNavigationBarHidden(false, animated: false)
         
+        // Set Tag.
+        
         return memedImage
     }
     
