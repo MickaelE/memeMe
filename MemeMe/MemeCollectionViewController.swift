@@ -54,6 +54,13 @@ class MemeCollectionViewController: UICollectionViewController,   UICollectionVi
         return cell
     
     }
+    
+    override func collectionView(collectionView: UICollectionView, didDeselectItemAtIndexPath indexPath: NSIndexPath) {
+        //Open Detailvivdw.
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        let vc = storyboard.instantiateViewControllerWithIdentifier("MemeDetailController") as! MemeDetailController
+        self.presentViewController(vc, animated: true, completion: nil)
+    }
     func collectionView(collectionView: UICollectionView,
         layout collectionViewLayout: UICollectionViewLayout,
         sizeForItemAtIndexPath indexPath: NSIndexPath) -> CGSize {

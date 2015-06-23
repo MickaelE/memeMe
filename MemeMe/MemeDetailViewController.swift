@@ -9,6 +9,14 @@
 import Foundation
 import UIKit
 
-class MemeDetailViewController: UIViewController {
+class MemeDetailViewController: UIViewController, UINavigationControllerDelegate {
+     var meme: memeObject!
+    
+    @IBOutlet weak var memeImage: UIImageView!
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        memeImage.image = meme.memeImage
+    }
+
     
 }
