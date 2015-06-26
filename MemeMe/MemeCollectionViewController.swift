@@ -50,23 +50,25 @@ class MemeCollectionViewController: UICollectionViewController,   UICollectionVi
         // Configure the cell
         let image = memes[indexPath.row].memeImage
         cell.memeImage.image = image;
-        
         return cell
     
     }
     
     override func collectionView(collectionView: UICollectionView, didDeselectItemAtIndexPath indexPath: NSIndexPath) {
-        //Open Detailvivdw.
-        let storyboard = UIStoryboard(name: "Main", bundle: nil)
-        let vc = storyboard.instantiateViewControllerWithIdentifier("MemeDetailController") as! MemeDetailController
-        self.presentViewController(vc, animated: true, completion: nil)
-    }
-    func collectionView(collectionView: UICollectionView,
-        layout collectionViewLayout: UICollectionViewLayout,
-        sizeForItemAtIndexPath indexPath: NSIndexPath) -> CGSize {
-            
-            let image = memes[indexPath.row].memeImage;
-            return image.size;
+        performSegueWithIdentifier("MemeDetailSegue1", sender: self)
+
     }
     
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?){
+        if let indexPath = self.collectionView?.indexPathForCell(sender as! UICollectionViewCell) {
+        if (segue.identifier == "MemeDetailSegue1") {
+            var viewController = segue.destinationViewController as! MemeDetailViewController
+            viewController.singleMeme = memes[indexPath.row].memeImage;
+        }
+        }
+        
+    }
+
+    
+       
 }

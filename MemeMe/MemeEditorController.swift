@@ -16,9 +16,12 @@ class MemeEditorController : UIViewController, UITextFieldDelegate, UIImagePicke
     var activeTextField: UITextField!
     @IBOutlet weak var shareMeme: UIButton!
     @IBOutlet weak var imageView: UIImageView!
-    
     @IBOutlet weak var BottomText: UITextField!
     @IBOutlet weak var TopText: UITextField!
+    @IBOutlet weak var openCameraButton: UIBarButtonItem!
+    @IBOutlet weak var memeNavBar: UINavigationBar!
+    @IBOutlet weak var memeToolBar: UIToolbar!
+    
     let memeTextAttributes = [
         NSStrokeColorAttributeName : UIColor.blackColor(),
         NSForegroundColorAttributeName : UIColor.whiteColor(),
@@ -49,6 +52,13 @@ class MemeEditorController : UIViewController, UITextFieldDelegate, UIImagePicke
         //Sharebutton
         if shareMeme.enabled == true {
             shareMeme.enabled = false;
+        }
+        
+        //Camerabutton
+        if (UIImagePickerController.isSourceTypeAvailable(UIImagePickerControllerSourceType.Camera)){
+            openCameraButton.enabled = true
+        } else {
+            openCameraButton.enabled = false
         }
         navigationController?.setToolbarHidden(false, animated: true)
         navigationController?.hidesBarsWhenKeyboardAppears = true
@@ -153,7 +163,10 @@ class MemeEditorController : UIViewController, UITextFieldDelegate, UIImagePicke
     func generateMemedImage() -> UIImage {
         
         // TODO: Hide toolbar and navbar
-        self.navigationController?.setToolbarHidden(true, animated: true)
+        self.memeToolBar.hidden = true
+        self.memeNavBar.hidden = true
+        self.navigationController?.setToolbarHidden(true, animated:
+            true)
         self.navigationController?.setNavigationBarHidden(true, animated: false)
         
         // Render view to an image
@@ -165,6 +178,8 @@ class MemeEditorController : UIViewController, UITextFieldDelegate, UIImagePicke
         UIGraphicsEndImageContext()
         
         // TODO:  Show toolbar and navbar
+        self.memeToolBar.hidden = false
+        self.memeNavBar.hidden = false
         self.navigationController?.setToolbarHidden(false, animated: true)
         self.navigationController?.setNavigationBarHidden(false, animated: false)
         

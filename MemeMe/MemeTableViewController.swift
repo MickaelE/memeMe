@@ -11,9 +11,9 @@ import UIKit
 
 class MemeTableViewController :UIViewController, UITableViewDelegate,UITableViewDataSource {
     var editorView:MemeEditorController?
+    var memes: [memeObject]!
     @IBOutlet weak var tableView: UITableView!
     
-        var memes: [memeObject]!
     override func viewDidLoad() {
         super.viewDidLoad()
         editorView = MemeEditorController();
@@ -22,11 +22,18 @@ class MemeTableViewController :UIViewController, UITableViewDelegate,UITableView
 
     }
     override func viewWillAppear(animated: Bool) {
-        //super.viewWillAppear()
+        //First fetch appdelegate object.
         let object = UIApplication.sharedApplication().delegate
         let appDelegate = object as! AppDelegate
+        //Then fetch global object-
         memes = appDelegate.memes
+        //Reload the datasource.
         self.tableView.reloadData()
+        
+        //If memes object is emty, then open editor.
+        if memes.count == 0 {
+            openMemeEditor(self)
+        }
        
     }
 
@@ -38,7 +45,7 @@ class MemeTableViewController :UIViewController, UITableViewDelegate,UITableView
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         var cell:UITableViewCell = self.tableView.dequeueReusableCellWithIdentifier("memTableCell") as! UITableViewCell
-         var imageName = memes[indexPath.row].memeImage
+        var imageName = memes[indexPath.row].memeImage
     
         cell.imageView?.contentMode  = .ScaleAspectFit
         cell.imageView?.image = imageName;
@@ -49,13 +56,25 @@ class MemeTableViewController :UIViewController, UITableViewDelegate,UITableView
     }
     
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        var cell:UITableViewCell = self.tableView.dequeueReusableCellWithIdentifier("memTableCell") as! UITableViewCell
-        cell.imageView?.image = memes[indexPath.row].memeImage;
+        performSegueWithIdentifier("MemeDetailSegue2", sender: self)
 
     }
-
+    
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?){
+        // If anytning is selected.
+         if let indexPath = self.tableView?.indexPathForSelectedRow() {
+            //And the right seque
+            if (segue.identifier == "MemeDetailSegue2") {
+                // Get an handle to the object
+                var viewController = segue.destinationViewController as! MemeDetailViewController
+                // And pass value.
+                viewController.singleMeme =  memes[indexPath.row].memeImage
+            }
+        }
+    }
+    
     @IBAction func openMemeEditor(sender: AnyObject) {
-       //Open editor.
+       //Open segue editor.
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         let vc = storyboard.instantiateViewControllerWithIdentifier("MemeEditorController") as! MemeEditorController
         self.presentViewController(vc, animated: true, completion: nil)

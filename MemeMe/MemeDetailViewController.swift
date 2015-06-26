@@ -9,14 +9,19 @@
 import Foundation
 import UIKit
 
-class MemeDetailViewController: UIViewController, UINavigationControllerDelegate {
-     var meme: memeObject!
+class MemeDetailViewController: UIViewController, UINavigationControllerDelegate  {
     
     @IBOutlet weak var memeImage: UIImageView!
+    var singleMeme: UIImage!
+    var textTest: String!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        memeImage.image = meme.memeImage
-    }
+        memeImage.image = singleMeme;
+        if singleMeme == nil {
+        println( "Detail: Single Meme is emty")
+        }
+         }
 
     
 }
