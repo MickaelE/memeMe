@@ -14,13 +14,14 @@ class MemeEditorController : UIViewController, UITextFieldDelegate, UIImagePicke
     var imagePicker = UIImagePickerController()
     var memeImage: UIImage!
     var activeTextField: UITextField!
-    @IBOutlet weak var shareMeme: UIButton!
     @IBOutlet weak var imageView: UIImageView!
     @IBOutlet weak var BottomText: UITextField!
     @IBOutlet weak var TopText: UITextField!
     @IBOutlet weak var openCameraButton: UIBarButtonItem!
     @IBOutlet weak var memeNavBar: UINavigationBar!
     @IBOutlet weak var memeToolBar: UIToolbar!
+    @IBOutlet weak var topRestraint: NSLayoutConstraint!
+    @IBOutlet weak var shareMeme: UIBarButtonItem!
     
     let memeTextAttributes = [
         NSStrokeColorAttributeName : UIColor.blackColor(),
@@ -32,7 +33,7 @@ class MemeEditorController : UIViewController, UITextFieldDelegate, UIImagePicke
         super.viewDidLoad()
         
         //Configure imageView.
-        imageView.contentMode = .ScaleAspectFit
+        imageView.contentMode = .ScaleAspectFill
        
         // Configure top textbox
         TopText.text = "Top";
@@ -69,14 +70,12 @@ class MemeEditorController : UIViewController, UITextFieldDelegate, UIImagePicke
         navigationController?.hidesBarsOnSwipe = true
 
     }
-    @IBAction func closeEditor(sender: AnyObject) {
-        self.dismissViewControllerAnimated(false, completion: nil)
-    }
     
-    @IBAction func shareMeme(sender: AnyObject) {
+    @IBAction func shareMemeAction(sender: AnyObject) {
         //Share the meme
         shareMemeFuction()
     }
+    
     func textFieldDidBeginEditing(textField: UITextField) {
         //Remove default.
         textField.text.removeAll(keepCapacity: false)
@@ -143,12 +142,21 @@ class MemeEditorController : UIViewController, UITextFieldDelegate, UIImagePicke
     
     func imagePickerController(picker: UIImagePickerController, didFinishPickingImage image: UIImage!, editingInfo: [NSObject : AnyObject]!) {
         let pickedImage = image as UIImage
-        imageView.contentMode = .ScaleAspectFit
+        imageView.contentMode = .ScaleToFill
         imageView.image = pickedImage
         dismissViewControllerAnimated(true, completion: nil)
         if shareMeme.enabled == false {
             shareMeme.enabled = true;
         }
+        
+        //Image and text adjustment.
+      /*  let height =  imageView.frame.size.height - pickedImage.size.height / 2;
+        println(height)
+        let width = pickedImage.size.width;
+        var dy = height - topRestraint.constant
+        println(dy)
+       topRestraint.constant =  dy*/
+        
     }
     //Meme section
     
@@ -158,6 +166,7 @@ class MemeEditorController : UIViewController, UITextFieldDelegate, UIImagePicke
         let object = UIApplication.sharedApplication().delegate
         let appDelegate = object as! AppDelegate
         appDelegate.memes.append(meme)
+        
     }
     
     func generateMemedImage() -> UIImage {
