@@ -12,16 +12,32 @@ import UIKit
 class MemeDetailViewController: UIViewController, UINavigationControllerDelegate  {
     
     @IBOutlet weak var memeImage: UIImageView!
-    var singleMeme: UIImage!
     var textTest: String!
+    var detailMeme: memeObject!
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        memeImage.image = singleMeme;
-        if singleMeme == nil {
-        println( "Detail: Single Meme is emty")
+       
+        //Load meme 
+        if detailMeme == nil {
+        println( "Detail:  Meme is emty")
+        } else{
+             memeImage.image = detailMeme.memeImage;
         }
          }
-
     
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        //the right seque?
+        if (segue.identifier == "openEditFromDetailView") {
+            //Open meme editor.
+            var editController = segue.destinationViewController as! MemeEditorController
+            editController.editMeme = detailMeme
+            editController.hidesBottomBarWhenPushed  = true;
+        }
+    }
+    
+    @IBAction func openMeneEditor(sender: AnyObject) {
+         performSegueWithIdentifier("openEditFromDetailView", sender: self)
+    }
 }
+

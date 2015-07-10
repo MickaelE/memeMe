@@ -9,36 +9,36 @@
 import Foundation
 import UIKit
 
-class MemeEditorController : UIViewController, UITextFieldDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+class MemeEditorController : UIViewController, UITextFieldDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate  {
     
     var imagePicker = UIImagePickerController()
     var memeImage: UIImage!
     var activeTextField: UITextField!
+    var editMeme: memeObject!
     @IBOutlet weak var imageView: UIImageView!
     @IBOutlet weak var BottomText: UITextField!
     @IBOutlet weak var TopText: UITextField!
     @IBOutlet weak var openCameraButton: UIBarButtonItem!
-    @IBOutlet weak var memeNavBar: UINavigationBar!
-    @IBOutlet weak var memeToolBar: UIToolbar!
-    @IBOutlet weak var topRestraint: NSLayoutConstraint!
     @IBOutlet weak var shareMeme: UIBarButtonItem!
+    @IBOutlet weak var navBarOutlet: UINavigationItem!
+    @IBOutlet weak var memeToolBar: UIToolbar!
     
     let memeTextAttributes = [
         NSStrokeColorAttributeName : UIColor.blackColor(),
         NSForegroundColorAttributeName : UIColor.whiteColor(),
         NSFontAttributeName : UIFont(name: "HelveticaNeue-CondensedBlack", size: 40)!,
-        NSStrokeWidthAttributeName :2]
+        NSStrokeWidthAttributeName :-3]
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+      
         //Configure imageView.
         imageView.contentMode = .ScaleAspectFill
        
         // Configure top textbox
-        TopText.text = "Top";
         TopText.defaultTextAttributes = memeTextAttributes;
         TopText.textAlignment = NSTextAlignment.Center;
+        TopText.text = "Top";
     
         // Configure bottom textbox
         BottomText.text = "Bottom";
@@ -61,14 +61,18 @@ class MemeEditorController : UIViewController, UITextFieldDelegate, UIImagePicke
         } else {
             openCameraButton.enabled = false
         }
-        navigationController?.setToolbarHidden(false, animated: true)
-        navigationController?.hidesBarsWhenKeyboardAppears = true
-}
+        
+        //If its edit time.
+        if editMeme != nil {
+            TopText.text = editMeme.topString
+            BottomText.text = editMeme.bottomString
+            imageView.image = editMeme.orginalImage
+             self.memeToolBar.hidden = false
+        }
+    }
+    
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
-        
-        navigationController?.hidesBarsOnSwipe = true
-
     }
     
     @IBAction func shareMemeAction(sender: AnyObject) {
@@ -90,18 +94,22 @@ class MemeEditorController : UIViewController, UITextFieldDelegate, UIImagePicke
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
+        //Subscribe to notifcations
         self.subscribeToKeyboardNotifications()
     }
+    
     override func viewWillDisappear(animated: Bool) {
         super.viewWillDisappear(animated)
     }
     
     func subscribeToKeyboardNotifications() {
+        // Create notifications.
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "keyboardWillShow:"    , name: UIKeyboardWillShowNotification, object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "keyboardWillHide:"    , name: UIKeyboardWillHideNotification, object: nil)
     }
     
     func unsubscribeFromKeyboardNotifications() {
+        //Remove supscriptions.
         NSNotificationCenter.defaultCenter().removeObserver(self, name:
             UIKeyboardWillShowNotification, object: nil)
         NSNotificationCenter.defaultCenter().removeObserver(self, name:
@@ -109,7 +117,6 @@ class MemeEditorController : UIViewController, UITextFieldDelegate, UIImagePicke
     }
     
     func keyboardWillShow(notification: NSNotification) {
-       
         if activeTextField.tag == 1 {
         self.view.frame.origin.y -= getKeyboardHeight(notification)
         }
@@ -121,7 +128,6 @@ class MemeEditorController : UIViewController, UITextFieldDelegate, UIImagePicke
         }
     }
 
-
     func getKeyboardHeight(notification: NSNotification) -> CGFloat {
         let userInfo = notification.userInfo
         let keyboardSize = userInfo![UIKeyboardFrameEndUserInfoKey] as! NSValue // of CGRect
@@ -129,11 +135,13 @@ class MemeEditorController : UIViewController, UITextFieldDelegate, UIImagePicke
     }
     
     @IBAction func openImageCatalog(sender: AnyObject) {
+        //Open library
         imagePicker.sourceType = UIImagePickerControllerSourceType.PhotoLibrary;
         self.presentViewController(imagePicker, animated: true, completion: nil)
     }
     
     @IBAction func openCamera(sender: AnyObject) {
+        //Open camera if present.
         if (UIImagePickerController.isSourceTypeAvailable(UIImagePickerControllerSourceType.Camera)){
         imagePicker.sourceType = UIImagePickerControllerSourceType.Camera;
             self.presentViewController(imagePicker, animated: true, completion: nil)
@@ -141,26 +149,20 @@ class MemeEditorController : UIViewController, UITextFieldDelegate, UIImagePicke
     }
     
     func imagePickerController(picker: UIImagePickerController, didFinishPickingImage image: UIImage!, editingInfo: [NSObject : AnyObject]!) {
+        //Open imagepicker.
         let pickedImage = image as UIImage
-        imageView.contentMode = .ScaleToFill
+        imageView.contentMode = .ScaleAspectFit
         imageView.image = pickedImage
-        dismissViewControllerAnimated(true, completion: nil)
         if shareMeme.enabled == false {
             shareMeme.enabled = true;
         }
-        
-        //Image and text adjustment.
-      /*  let height =  imageView.frame.size.height - pickedImage.size.height / 2;
-        println(height)
-        let width = pickedImage.size.width;
-        var dy = height - topRestraint.constant
-        println(dy)
-       topRestraint.constant =  dy*/
-        
+         dismissViewControllerAnimated(true, completion: nil)
+        self.memeToolBar.hidden = false
     }
     //Meme section
     
     func save() {
+        //Save to global object.
         var meme = memeObject(topString: TopText.text, bottomString: BottomText.text, orginalImage: imageView.image!, memeImage: memeImage)
         // Add it to the memes array in the Application Delegate
         let object = UIApplication.sharedApplication().delegate
@@ -170,10 +172,8 @@ class MemeEditorController : UIViewController, UITextFieldDelegate, UIImagePicke
     }
     
     func generateMemedImage() -> UIImage {
-        
-        // TODO: Hide toolbar and navbar
+        //Hide toolbar and navbar.
         self.memeToolBar.hidden = true
-        self.memeNavBar.hidden = true
         self.navigationController?.setToolbarHidden(true, animated:
             true)
         self.navigationController?.setNavigationBarHidden(true, animated: false)
@@ -186,13 +186,10 @@ class MemeEditorController : UIViewController, UITextFieldDelegate, UIImagePicke
         UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext()
         
-        // TODO:  Show toolbar and navbar
+        //Show toolbar and navbar
         self.memeToolBar.hidden = false
-        self.memeNavBar.hidden = false
         self.navigationController?.setToolbarHidden(false, animated: true)
         self.navigationController?.setNavigationBarHidden(false, animated: false)
-        
-        // Set Tag.
         
         return memedImage
     }
@@ -201,6 +198,7 @@ class MemeEditorController : UIViewController, UITextFieldDelegate, UIImagePicke
         //Create the meme
         memeImage = generateMemedImage()
         
+        //Open standard share controller.
         let activityViewController = UIActivityViewController(
             activityItems: [memeImage],
             applicationActivities: nil)
@@ -210,9 +208,14 @@ class MemeEditorController : UIViewController, UITextFieldDelegate, UIImagePicke
             if success == true{
                 self.save();
                 self.dismissViewControllerAnimated(false, completion: nil)
+                self.navigationController?.popToRootViewControllerAnimated(true)
             }
         }
     }
-
-
+    
+    @IBAction func cancelAction(sender: AnyObject) {
+        // Cancel button.
+        navigationController?.popToRootViewControllerAnimated(true)
+    }
 }
+
