@@ -36,14 +36,12 @@ class MemeEditorController : UIViewController, UITextFieldDelegate, UIImagePicke
         imageView.contentMode = .ScaleAspectFill
        
         // Configure top textbox
-        TopText.defaultTextAttributes = memeTextAttributes;
-        TopText.textAlignment = NSTextAlignment.Center;
         TopText.text = "Top";
+        formatTextField(TopText) //Changed
     
         // Configure bottom textbox
         BottomText.text = "Bottom";
-        BottomText.defaultTextAttributes = memeTextAttributes;
-        BottomText.textAlignment = NSTextAlignment.Center;
+        formatTextField(BottomText) //Changed
        
         //Delegates
         imagePicker.delegate = self
@@ -69,6 +67,12 @@ class MemeEditorController : UIViewController, UITextFieldDelegate, UIImagePicke
             imageView.image = editMeme.orginalImage
              self.memeToolBar.hidden = false
         }
+    }
+    
+    func formatTextField(text: UITextField){
+        //Common formatting.
+        text.defaultTextAttributes = memeTextAttributes;
+        text.textAlignment = NSTextAlignment.Center;
     }
     
     override func viewDidAppear(animated: Bool) {
@@ -118,13 +122,14 @@ class MemeEditorController : UIViewController, UITextFieldDelegate, UIImagePicke
     
     func keyboardWillShow(notification: NSNotification) {
         if activeTextField.tag == 1 {
-        self.view.frame.origin.y -= getKeyboardHeight(notification)
+        self.view.frame.origin.y = -getKeyboardHeight(notification)
         }
     }
     
     func keyboardWillHide(notification: NSNotification) {
         if activeTextField.tag == 1 {
-        self.view.frame.origin.y += getKeyboardHeight(notification)
+            //Changed.
+        self.view.frame.origin.y = 0 //Changed
         }
     }
 
@@ -163,7 +168,7 @@ class MemeEditorController : UIViewController, UITextFieldDelegate, UIImagePicke
     
     func save() {
         //Save to global object.
-        var meme = memeObject(topString: TopText.text, bottomString: BottomText.text, orginalImage: imageView.image!, memeImage: memeImage)
+        var meme = memeObject(_topString: TopText.text, _bottomString: BottomText.text, _orginalImage: imageView.image!, _memeImage: memeImage)
         // Add it to the memes array in the Application Delegate
         let object = UIApplication.sharedApplication().delegate
         let appDelegate = object as! AppDelegate

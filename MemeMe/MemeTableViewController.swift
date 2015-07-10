@@ -24,33 +24,34 @@ class MemeTableViewController :UIViewController, UITableViewDelegate,UITableView
         tableView.registerNib(nib, forCellReuseIdentifier: "memeTableCell")
         tableView.rowHeight = 60
         //Handle tab and navbar.
-        if  self.tabBarController?.tabBar.hidden ==  true {
-             self.tabBarController?.tabBar.hidden = false
+        if  tabBarController?.tabBar.hidden ==  true {
+             tabBarController?.tabBar.hidden = false
         }
-                self.navigationItem.leftBarButtonItem = self.editButtonItem();
+                navigationItem.leftBarButtonItem = self.editButtonItem();
     }
     
     override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated) //Changed
         //First fetch appdelegate object.
         let object = UIApplication.sharedApplication().delegate
         let appDelegate = object as! AppDelegate
         //Then fetch global object-
         memes = appDelegate.memes
         //Reload the datasource.
-        self.tableView.reloadData()
-        self.navigationController?.setToolbarHidden(true, animated: animated)
+        tableView.reloadData()
+        navigationController?.setToolbarHidden(true, animated: animated)
        
     }
     
     override func viewDidAppear(animated: Bool) {
         
         //If memes object is emty, then open editor.
-        if(!NSUserDefaults.standardUserDefaults().boolForKey("firstlaunch1.0")){
+     /*   if(!NSUserDefaults.standardUserDefaults().boolForKey("firstlaunch1.0")){
             //Put any code here and it will be executed only once.
             println("Is a first launch")
             NSUserDefaults.standardUserDefaults().setBool(true, forKey: "firstlaunch1.0")
             self.performSegueWithIdentifier("memeEditorSeuge", sender: self)
-        }
+        }*/
     }
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -63,7 +64,7 @@ class MemeTableViewController :UIViewController, UITableViewDelegate,UITableView
         
         //Create editing
         super.setEditing(editing, animated: animated)
-        self.tableView.setEditing(editing, animated: animated)
+        tableView.setEditing(editing, animated: animated)
     }
     
     func tableView(tableView: UITableView,
@@ -97,8 +98,8 @@ class MemeTableViewController :UIViewController, UITableViewDelegate,UITableView
         
         var imageName = memes[indexPath.row].memeImage
         
-        let title = memes[indexPath.row].topString + " " + memes[indexPath.row].bottomString;
-        customCell.loadItem(title: title, image: imageName)
+        let title = memes[indexPath.row].topString! + " " + memes[indexPath.row].bottomString!;
+        customCell.loadItem(title: title, image: imageName!)
         return customCell
     }
     
