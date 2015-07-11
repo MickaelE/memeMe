@@ -20,9 +20,9 @@ class MemeDetailViewController: UIViewController, UINavigationControllerDelegate
        
         //Load meme 
         if detailMeme == nil {
-        println( "Detail:  Meme is emty")
+            println( "Detail:  Meme is emty")
         } else{
-             memeImage.image = detailMeme.memeImage;
+            memeImage.image = detailMeme.memeImage;
         }
          }
     
@@ -32,7 +32,7 @@ class MemeDetailViewController: UIViewController, UINavigationControllerDelegate
             //Open meme editor.
             var editController = segue.destinationViewController as! MemeEditorController
             editController.editMeme = detailMeme
-            editController.hidesBottomBarWhenPushed  = true;
+           // editController.hidesBottomBarWhenPushed  = true;
         }
     }
     

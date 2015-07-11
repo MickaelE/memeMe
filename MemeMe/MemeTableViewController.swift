@@ -27,7 +27,8 @@ class MemeTableViewController :UIViewController, UITableViewDelegate,UITableView
         if  tabBarController?.tabBar.hidden ==  true {
              tabBarController?.tabBar.hidden = false
         }
-                navigationItem.leftBarButtonItem = self.editButtonItem();
+        
+        navigationItem.leftBarButtonItem = self.editButtonItem();
     }
     
     override func viewWillAppear(animated: Bool) {
