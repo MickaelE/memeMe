@@ -45,15 +45,7 @@ class MemeTableViewController :UIViewController, UITableViewDelegate,UITableView
     }
     
     override func viewDidAppear(animated: Bool) {
-        
-        //If memes object is emty, then open editor.
-     /*   if(!NSUserDefaults.standardUserDefaults().boolForKey("firstlaunch1.0")){
-            //Put any code here and it will be executed only once.
-            println("Is a first launch")
-            NSUserDefaults.standardUserDefaults().setBool(true, forKey: "firstlaunch1.0")
-            self.performSegueWithIdentifier("memeEditorSeuge", sender: self)
-        }*/
-    }
+           }
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         println(memes.count)

@@ -41,7 +41,7 @@ class MemeCollectionViewController: UICollectionViewController,   UICollectionVi
     
     override func numberOfSectionsInCollectionView(collectionView: UICollectionView) -> Int {
         println(memes.count)
-        return memes.count;
+        return 1;
     }
     
     override func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {

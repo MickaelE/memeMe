@@ -100,6 +100,7 @@ class MemeEditorController : UIViewController, UITextFieldDelegate, UIImagePicke
         super.viewWillAppear(animated)
         //Subscribe to notifcations
         self.subscribeToKeyboardNotifications()
+        
     }
     
     override func viewWillDisappear(animated: Bool) {
@@ -122,14 +123,13 @@ class MemeEditorController : UIViewController, UITextFieldDelegate, UIImagePicke
     
     func keyboardWillShow(notification: NSNotification) {
         if activeTextField.tag == 1 {
-        self.view.frame.origin.y = -getKeyboardHeight(notification)
-        }
-    }
+            self.view.frame.origin.y = -getKeyboardHeight(notification)
+        }     }
     
     func keyboardWillHide(notification: NSNotification) {
         if activeTextField.tag == 1 {
             //Changed.
-        self.view.frame.origin.y = 0 //Changed
+            view.frame.origin.y = 0 //Changed
         }
     }
 
@@ -142,14 +142,14 @@ class MemeEditorController : UIViewController, UITextFieldDelegate, UIImagePicke
     @IBAction func openImageCatalog(sender: AnyObject) {
         //Open library
         imagePicker.sourceType = UIImagePickerControllerSourceType.PhotoLibrary;
-        self.presentViewController(imagePicker, animated: true, completion: nil)
+        presentViewController(imagePicker, animated: true, completion: nil)
     }
     
     @IBAction func openCamera(sender: AnyObject) {
         //Open camera if present.
         if (UIImagePickerController.isSourceTypeAvailable(UIImagePickerControllerSourceType.Camera)){
-        imagePicker.sourceType = UIImagePickerControllerSourceType.Camera;
-            self.presentViewController(imagePicker, animated: true, completion: nil)
+            imagePicker.sourceType = UIImagePickerControllerSourceType.Camera;
+            presentViewController(imagePicker, animated: true, completion: nil)
         }
     }
     
@@ -162,39 +162,41 @@ class MemeEditorController : UIViewController, UITextFieldDelegate, UIImagePicke
             shareMeme.enabled = true;
         }
          dismissViewControllerAnimated(true, completion: nil)
-        self.memeToolBar.hidden = false
+        memeToolBar.hidden = false
     }
     //Meme section
     
     func save() {
+        //Stop unwanted saves.
+        if memeImage != nil {
         //Save to global object.
-        var meme = memeObject(_topString: TopText.text, _bottomString: BottomText.text, _orginalImage: imageView.image!, _memeImage: memeImage)
-        // Add it to the memes array in the Application Delegate
-        let object = UIApplication.sharedApplication().delegate
-        let appDelegate = object as! AppDelegate
-        appDelegate.memes.append(meme)
-        
+            var meme = memeObject(_topString: TopText.text, _bottomString: BottomText.text, _orginalImage: imageView.image!, _memeImage: memeImage)
+            // Add it to the memes array in the Application Delegate
+            let object = UIApplication.sharedApplication().delegate
+            let appDelegate = object as! AppDelegate
+            appDelegate.memes.append(meme)
+         }
     }
     
     func generateMemedImage() -> UIImage {
         //Hide toolbar and navbar.
-        self.memeToolBar.hidden = true
-        self.navigationController?.setToolbarHidden(true, animated:
+        memeToolBar.hidden = true
+        navigationController?.setToolbarHidden(true, animated:
             true)
-        self.navigationController?.setNavigationBarHidden(true, animated: false)
+        navigationController?.setNavigationBarHidden(true, animated: false)
         
         // Render view to an image
-        UIGraphicsBeginImageContext(self.view.frame.size)
-        self.view.drawViewHierarchyInRect(self.view.frame,
+        UIGraphicsBeginImageContext(view.frame.size)
+        view.drawViewHierarchyInRect(view.frame,
             afterScreenUpdates: true)
         let memedImage : UIImage =
         UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext()
         
         //Show toolbar and navbar
-        self.memeToolBar.hidden = false
-        self.navigationController?.setToolbarHidden(false, animated: true)
-        self.navigationController?.setNavigationBarHidden(false, animated: false)
+        memeToolBar.hidden = false
+        navigationController?.setToolbarHidden(false, animated: true)
+        navigationController?.setNavigationBarHidden(false, animated: false)
         
         return memedImage
     }

@@ -47,7 +47,7 @@
                                         <fontDescription key="fontDescription" name="HelveticaNeue-CondensedBlack" family="Helvetica Neue" pointSize="40"/>
                                         <textInputTraits key="textInputTraits" autocapitalizationType="allCharacters"/>
                                     </textField>
-                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="BOTTOM" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="9bg-nl-LuM" userLabel="BottomText">
+                                    <textField opaque="NO" clipsSubviews="YES" tag="1" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="BOTTOM" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="9bg-nl-LuM" userLabel="BottomText">
                                         <rect key="frame" x="0.0" y="-30" width="97" height="30"/>
                                         <animations/>
                                         <fontDescription key="fontDescription" name="HelveticaNeue-CondensedBlack" family="Helvetica Neue" pointSize="40"/>
@@ -139,7 +139,7 @@
                                 <action selector="cancelAction:" destination="kgP-fm-em4" id="Kms-f2-QUq"/>
                             </connections>
                         </barButtonItem>
-                        <barButtonItem key="rightBarButtonItem" image="share" id="FsP-Hl-hnJ" userLabel="Share">
+                        <barButtonItem key="rightBarButtonItem" systemItem="action" id="FsP-Hl-hnJ" userLabel="Share">
                             <connections>
                                 <action selector="shareMemeAction:" destination="kgP-fm-em4" id="5gU-2E-WS0"/>
                             </connections>
@@ -483,7 +483,6 @@
         <image name="collection" width="30" height="30"/>
         <image name="images" width="22" height="22"/>
         <image name="photo" width="22" height="22"/>
-        <image name="share" width="35" height="35"/>
         <image name="table" width="30" height="30"/>
     </resources>
     <inferredMetricsTieBreakers>
