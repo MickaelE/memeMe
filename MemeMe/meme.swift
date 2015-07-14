@@ -11,15 +11,9 @@ import UIKit
 
 struct memeObject {
     
-    var topString: String?
-    var bottomString: String?
-    var orginalImage: UIImage?
-    var memeImage: UIImage?
+    var topString: String!
+    var bottomString: String!
+    var orginalImage: UIImage!
+    var memeImage: UIImage!
     
-    init(_topString: String?, _bottomString: String?, _orginalImage: UIImage?, _memeImage: UIImage?) {
-        topString = _topString
-        bottomString = _bottomString
-        orginalImage = _orginalImage
-        memeImage = _memeImage
     }
-}

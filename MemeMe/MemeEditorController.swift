@@ -161,7 +161,7 @@ class MemeEditorController : UIViewController, UITextFieldDelegate, UIImagePicke
         if shareMeme.enabled == false {
             shareMeme.enabled = true;
         }
-         dismissViewControllerAnimated(true, completion: nil)
+        dismissViewControllerAnimated(true, completion: nil)
         memeToolBar.hidden = false
     }
     //Meme section
@@ -170,7 +170,7 @@ class MemeEditorController : UIViewController, UITextFieldDelegate, UIImagePicke
         //Stop unwanted saves.
         if memeImage != nil {
         //Save to global object.
-            var meme = memeObject(_topString: TopText.text, _bottomString: BottomText.text, _orginalImage: imageView.image!, _memeImage: memeImage)
+            var meme = memeObject(topString: TopText.text,bottomString: BottomText.text,orginalImage: imageView.image!,memeImage: memeImage)
             // Add it to the memes array in the Application Delegate
             let object = UIApplication.sharedApplication().delegate
             let appDelegate = object as! AppDelegate
@@ -225,4 +225,3 @@ class MemeEditorController : UIViewController, UITextFieldDelegate, UIImagePicke
         navigationController?.popToRootViewControllerAnimated(true)
     }
 }
-
